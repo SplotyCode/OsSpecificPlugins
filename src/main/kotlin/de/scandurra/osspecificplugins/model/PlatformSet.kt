@@ -9,10 +9,9 @@ class PlatformSet private constructor(private val bits: Long) {
 
     fun toPlatforms(): List<Platform> {
         val out = ArrayList<Platform>()
-        val archCount = Arch.entries.size
         for (os in OS.entries) {
             for (arch in Arch.entries) {
-                val bit = 1L shl (os.ordinal * archCount + arch.ordinal)
+                val bit = 1L shl bitOf(os, arch)
                 if ((bits and bit) != 0L) out += Platform(os, arch)
             }
         }
@@ -24,9 +23,8 @@ class PlatformSet private constructor(private val bits: Long) {
 
         fun fromIterable(targets: Iterable<Platform>): PlatformSet {
             var acc = 0L
-            val archCount = Arch.entries.size
             for (t in targets) {
-                val idx = t.os.ordinal * archCount + t.arch.ordinal
+                val idx = bitOf(t.os, t.arch)
                 acc = acc or (1L shl idx)
             }
             return PlatformSet(acc)
