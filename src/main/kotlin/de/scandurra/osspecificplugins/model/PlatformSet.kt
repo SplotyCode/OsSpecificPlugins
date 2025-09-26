@@ -5,21 +5,18 @@ class PlatformSet private constructor(private val bits: Long) {
     enum class CpuArchitecture { X86_64, ARM64 }
     data class Platform(val operationSystem: OperationSystem, val arch: CpuArchitecture)
 
-    fun contains(operationSystem: OperationSystem, arch: CpuArchitecture): Boolean = (bits and (1L shl bitOf(operationSystem, arch))) != 0L
+    fun contains(operationSystem: OperationSystem, arch: CpuArchitecture) =
+        (bits and (1L shl bitOf(operationSystem, arch))) != 0L
 
-    fun toPlatforms(): List<Platform> {
-        val out = ArrayList<Platform>()
-        for (os in OperationSystem.entries) {
-            for (arch in CpuArchitecture.entries) {
-                val bit = 1L shl bitOf(os, arch)
-                if ((bits and bit) != 0L) out += Platform(os, arch)
-            }
-        }
-        return out
-    }
+    fun toPlatforms() = allPlatforms.filter { contains(it.operationSystem, it.arch) }
 
     companion object {
-        private fun bitOf(operationSystem: OperationSystem, arch: CpuArchitecture): Int = operationSystem.ordinal * CpuArchitecture.entries.size + arch.ordinal
+        private fun bitOf(operationSystem: OperationSystem, arch: CpuArchitecture) =
+            operationSystem.ordinal * CpuArchitecture.entries.size + arch.ordinal
+
+        private val allPlatforms = OperationSystem.entries.flatMap { os ->
+            CpuArchitecture.entries.map { arch -> Platform(os, arch) }
+        }
 
         fun fromIterable(targets: Iterable<Platform>): PlatformSet {
             var acc = 0L
@@ -29,5 +26,9 @@ class PlatformSet private constructor(private val bits: Long) {
             }
             return PlatformSet(acc)
         }
+
+        fun fromPredicate(predicate: (Platform) -> Boolean) = fromIterable(allPlatforms.filter(predicate))
+
+        fun all() = fromIterable(allPlatforms)
     }
 }

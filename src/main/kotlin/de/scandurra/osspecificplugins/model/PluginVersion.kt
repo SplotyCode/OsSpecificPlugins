@@ -2,7 +2,7 @@ package de.scandurra.osspecificplugins.model
 
 import java.time.Instant
 
-class PluginVersion(
+data class PluginVersion(
     val version: SemVer,
     val releaseDate: Instant,
     val pluginArtifacts: List<PluginArtifact>
