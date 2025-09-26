@@ -45,5 +45,24 @@ class DevSeeder(private val repo: InMemoryPluginRepository) {
                 )
             )
         )
+        repo.upsert(
+            Plugin(
+                id = Plugin.PluginId("maconly"),
+                name = "Mac Only Plugin",
+                versions = listOf(
+                    PluginVersion(
+                        PluginVersion.SemVer("1.0.0"),
+                        Instant.parse("2022-01-01T00:00:00Z"),
+                        listOf(
+                            PluginArtifact(
+                                targets = PlatformSet.fromPredicate { it.operationSystem == OperationSystem.MACOS },
+                                url = "https://cdn.example/maconly-1.0.0.zip",
+                                checksum = "sha256:aaaaaaaaaaaa..."
+                            )
+                        )
+                    )
+                )
+            )
+        )
     }
 }
