@@ -1,7 +1,7 @@
 package de.scandurra.osspecificplugins.model
 
-import de.scandurra.osspecificplugins.model.PlatformSet.Arch
-import de.scandurra.osspecificplugins.model.PlatformSet.OS
+import de.scandurra.osspecificplugins.model.PlatformSet.CpuArchitecture
+import de.scandurra.osspecificplugins.model.PlatformSet.OperationSystem
 import de.scandurra.osspecificplugins.model.PlatformSet.Platform
 import org.junit.jupiter.api.Test
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -9,24 +9,24 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 
 class PlatformSetTest {
-    val allPlatforms = OS.entries.flatMap { os ->
-        Arch.entries.map { arch -> Platform(os, arch) }
+    val allPlatforms = OperationSystem.entries.flatMap { os ->
+        CpuArchitecture.entries.map { arch -> Platform(os, arch) }
     }
 
     @Test
     fun `empty set`() {
         val set = PlatformSet.fromIterable(emptyList())
         set.toPlatforms().shouldBeEmpty()
-        set.contains(OS.WINDOWS, Arch.X86_64) shouldBe false
-        set.contains(OS.LINUX, Arch.ARM64) shouldBe false
+        set.contains(OperationSystem.WINDOWS, CpuArchitecture.X86_64) shouldBe false
+        set.contains(OperationSystem.LINUX, CpuArchitecture.ARM64) shouldBe false
     }
 
     @Test
     fun `single platform`() {
-        val p = Platform(OS.LINUX, Arch.X86_64)
+        val p = Platform(OperationSystem.LINUX, CpuArchitecture.X86_64)
         val set = PlatformSet.fromIterable(listOf(p))
         allPlatforms.forEach { (os, arch) ->
-            val expected = (os == p.os && arch == p.arch)
+            val expected = (os == p.operationSystem && arch == p.arch)
             set.contains(os, arch) shouldBe expected
         }
         set.toPlatforms() shouldContainExactlyInAnyOrder listOf(p)
@@ -44,8 +44,8 @@ class PlatformSetTest {
     @Test
     fun `toPlatforms and fromIterable roundtrip`() {
         val initial = listOf(
-            Platform(OS.MACOS, Arch.ARM64),
-            Platform(OS.WINDOWS, Arch.X86_64)
+            Platform(OperationSystem.MACOS, CpuArchitecture.ARM64),
+            Platform(OperationSystem.WINDOWS, CpuArchitecture.X86_64)
         )
         val set = PlatformSet.fromIterable(initial)
         val roundTrip = PlatformSet.fromIterable(set.toPlatforms())
