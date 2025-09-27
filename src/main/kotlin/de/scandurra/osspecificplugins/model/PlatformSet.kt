@@ -13,6 +13,10 @@ class PlatformSet private constructor(private val bits: Long) {
 
     fun toPlatforms() = allPlatforms.filter { contains(it.operationSystem, it.arch) }
 
+    infix fun intersect(other: PlatformSet): PlatformSet = PlatformSet(bits and other.bits)
+
+    infix fun union(other: PlatformSet): PlatformSet = PlatformSet(bits or other.bits)
+
     companion object {
         private fun bitOf(operationSystem: OperationSystem, arch: CpuArchitecture) =
             operationSystem.ordinal * CpuArchitecture.entries.size + arch.ordinal
@@ -33,5 +37,7 @@ class PlatformSet private constructor(private val bits: Long) {
         fun fromPredicate(predicate: (Platform) -> Boolean) = fromIterable(allPlatforms.filter(predicate))
 
         fun all() = fromIterable(allPlatforms)
+
+        fun empty() = PlatformSet(0L)
     }
 }

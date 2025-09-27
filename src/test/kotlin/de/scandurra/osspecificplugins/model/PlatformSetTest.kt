@@ -24,6 +24,16 @@ class PlatformSetTest {
     }
 
     @Test
+    fun `empty factory`() {
+        val set = PlatformSet.empty()
+        set.toPlatforms().shouldBeEmpty()
+        set.contains(OperationSystem.WINDOWS, CpuArchitecture.X86_64) shouldBe false
+        set.contains(OperationSystem.MACOS, CpuArchitecture.ARM64) shouldBe false
+        set.isEmpty() shouldBe true
+        set.isNotEmpty() shouldBe false
+    }
+
+    @Test
     fun `single platform`() {
         val p = Platform(OperationSystem.LINUX, CpuArchitecture.X86_64)
         val set = PlatformSet.fromIterable(listOf(p))
@@ -34,6 +44,38 @@ class PlatformSetTest {
         set.toPlatforms() shouldContainExactlyInAnyOrder listOf(p)
         set.isEmpty() shouldBe false
         set.isNotEmpty() shouldBe true
+    }
+
+    @Test
+    fun `union of sets`() {
+        val p1 = Platform(OperationSystem.LINUX, CpuArchitecture.X86_64)
+        val p2 = Platform(OperationSystem.MACOS, CpuArchitecture.ARM64)
+        val s1 = PlatformSet.fromIterable(listOf(p1))
+        val s2 = PlatformSet.fromIterable(listOf(p2))
+        val union = s1 union s2
+        union.toPlatforms() shouldContainExactlyInAnyOrder listOf(p1, p2)
+        allPlatforms.forEach { (os, arch) ->
+            val expected = (os == p1.operationSystem && arch == p1.arch) || (os == p2.operationSystem && arch == p2.arch)
+            union.contains(os, arch) shouldBe expected
+        }
+    }
+
+    @Test
+    fun `intersection of sets`() {
+        val common = Platform(OperationSystem.WINDOWS, CpuArchitecture.X86_64)
+        val onlyLeft = Platform(OperationSystem.LINUX, CpuArchitecture.X86_64)
+        val onlyRight = Platform(OperationSystem.MACOS, CpuArchitecture.ARM64)
+
+        val left = PlatformSet.fromIterable(listOf(common, onlyLeft))
+        val right = PlatformSet.fromIterable(listOf(common, onlyRight))
+
+        val inter = left intersect right
+        inter.toPlatforms() shouldContainExactlyInAnyOrder listOf(common)
+        inter.isNotEmpty() shouldBe true
+
+        val disjoint = PlatformSet.fromIterable(listOf(onlyLeft)) intersect PlatformSet.fromIterable(listOf(onlyRight))
+        disjoint.isEmpty() shouldBe true
+        disjoint.toPlatforms().shouldBeEmpty()
     }
 
     @Test
