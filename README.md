@@ -42,10 +42,10 @@ classDiagram
           ARM64
         } 
     }
-    Plugin "1" --> "1..*" PluginVersion : versions
+    Plugin "1" --> "0..*" PluginVersion : versions
     PluginVersion "1" --> "1..*" PluginArtifact : pluginArtifacts
     PluginArtifact "1" --> "1" PlatformSet : targets
-    PlatformSet "1" o-- "0..*" Platform : enthält
+    PlatformSet "1" o-- "0..*" Platform : contains
     Platform "1" --> "1" OperationSystem
     Platform "1" --> "1" CpuArchitecture
 
