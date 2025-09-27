@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
 class PluginController(
     private val repo: PluginRepository,
-    private val resolver: ResolverService
+    private val resolver: ResolverService,
 ) {
     @GetMapping("/plugins/{id}")
     fun getPlugin(@PathVariable id: String): ResponseEntity<Any> {

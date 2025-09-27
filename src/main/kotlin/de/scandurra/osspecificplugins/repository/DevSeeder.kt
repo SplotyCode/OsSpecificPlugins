@@ -27,9 +27,9 @@ class DevSeeder(private val repo: InMemoryPluginRepository) {
                             PluginArtifact(
                                 targets = PlatformSet.fromPredicate { it.operationSystem == OperationSystem.WINDOWS },
                                 url = "https://cdn.example/wsl-2.1.0.zip",
-                                checksum = "sha256:111111111111..."
-                            )
-                        )
+                                checksum = "sha256:111111111111...",
+                            ),
+                        ),
                     ),
                     PluginVersion(
                         PluginVersion.SemVer("2.0.0"),
@@ -38,12 +38,12 @@ class DevSeeder(private val repo: InMemoryPluginRepository) {
                             PluginArtifact(
                                 targets = PlatformSet.all(),
                                 url = "https://cdn.example/wsl-2.0.0.zip",
-                                checksum = "sha256:222222222222..."
-                            )
-                        )
-                    )
-                )
-            )
+                                checksum = "sha256:222222222222...",
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         )
         repo.upsert(
             Plugin(
@@ -57,12 +57,12 @@ class DevSeeder(private val repo: InMemoryPluginRepository) {
                             PluginArtifact(
                                 targets = PlatformSet.fromPredicate { it.operationSystem == OperationSystem.MACOS },
                                 url = "https://cdn.example/maconly-1.0.0.zip",
-                                checksum = "sha256:aaaaaaaaaaaa..."
-                            )
-                        )
-                    )
-                )
-            )
+                                checksum = "sha256:aaaaaaaaaaaa...",
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 }

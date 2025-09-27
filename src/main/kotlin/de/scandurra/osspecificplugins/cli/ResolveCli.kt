@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class ResolveCli(
     private val repo: PluginRepository,
-    private val resolver: ResolverService
+    private val resolver: ResolverService,
 ) : ApplicationRunner {
     override fun run(args: ApplicationArguments) {
         if (!args.containsOption("cli")) return
