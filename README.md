@@ -1,12 +1,9 @@
 # OS-Specific Plugins
 
+## Core Model
 ```mermaid
----
-config:
-  theme: neo
----
 classDiagram
-    namespace de.scandurra.osspecificplugins.model {
+    namespace Core_Model {
         class Plugin {
           +id: String
           +name: String
@@ -51,6 +48,30 @@ classDiagram
     Platform "1" --> "1" OperationSystem
     Platform "1" --> "1" CpuArchitecture
 
+```
+
+## HTTP API
+Start the Spring Boot application. To have some sample data available, enable the "dev" profile:
+
+```
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+The API will start on http://localhost:8080.
+
+OpenAPI/Swagger UI (provided by springdoc):
+- Swagger UI: http://localhost:8080/swagger-ui/index.html
+- OpenAPI JSON: http://localhost:8080/v3/api-docs
+
+If you dont want to run it locally, the [integration test](src/test/kotlin/de/scandurra/osspecificplugins/http/PluginControllerIntegrationTest.kt) provides good insights into the API..
+
+## CLI Usage
+The same application also provides a small CLI mode. Enable the dev profile (for sample data) and pass the `--cli` option along with non-option arguments: `<pluginId> <OS> <ARCH>`.
+
+```
+./gradlew bootRun --args='--spring.profiles.active=dev --cli <id> <os> <arch>'
+Example:
+./gradlew bootRun --args='--spring.profiles.active=dev --cli wsl WINDOWS X86_64'
 ```
 
 ## License
