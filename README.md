@@ -1,4 +1,5 @@
 # OS-Specific Plugins
+Prototype for the JetBrains internship: a minimal Kotlin/Spring Boot service/CLI that models OS/Arch-specific plugin variants and resolves the best match per client.
 
 ## Core Model
 ```mermaid
@@ -73,6 +74,10 @@ The same application also provides a small CLI mode. Enable the dev profile (for
 Example:
 ./gradlew bootRun --args='--spring.profiles.active=dev --cli wsl WINDOWS X86_64'
 ```
+
+## Repository and Persistence
+At the moment, the application uses an in-memory repository implementation.
+Although the service is in-memory only, the current bitflag representation of PlatformSet maps well to a relational database schema. 
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
