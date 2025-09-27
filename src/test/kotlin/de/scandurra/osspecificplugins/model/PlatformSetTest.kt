@@ -19,6 +19,8 @@ class PlatformSetTest {
         set.toPlatforms().shouldBeEmpty()
         set.contains(OperationSystem.WINDOWS, CpuArchitecture.X86_64) shouldBe false
         set.contains(OperationSystem.LINUX, CpuArchitecture.ARM64) shouldBe false
+        set.isEmpty() shouldBe true
+        set.isNotEmpty() shouldBe false
     }
 
     @Test
@@ -30,6 +32,8 @@ class PlatformSetTest {
             set.contains(os, arch) shouldBe expected
         }
         set.toPlatforms() shouldContainExactlyInAnyOrder listOf(p)
+        set.isEmpty() shouldBe false
+        set.isNotEmpty() shouldBe true
     }
 
     @Test

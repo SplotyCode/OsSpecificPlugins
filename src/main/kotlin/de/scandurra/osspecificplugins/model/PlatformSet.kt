@@ -8,6 +8,9 @@ class PlatformSet private constructor(private val bits: Long) {
     fun contains(operationSystem: OperationSystem, arch: CpuArchitecture) =
         (bits and (1L shl bitOf(operationSystem, arch))) != 0L
 
+    fun isEmpty(): Boolean = bits == 0L
+    fun isNotEmpty(): Boolean = !isEmpty()
+
     fun toPlatforms() = allPlatforms.filter { contains(it.operationSystem, it.arch) }
 
     companion object {
