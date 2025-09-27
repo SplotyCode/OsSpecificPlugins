@@ -2,6 +2,7 @@ package de.scandurra.osspecificplugins.http
 
 import de.scandurra.osspecificplugins.model.PlatformSet
 import de.scandurra.osspecificplugins.model.PlatformSet.OperationSystem
+import de.scandurra.osspecificplugins.model.PlatformSet.Platform
 import de.scandurra.osspecificplugins.model.Plugin
 import de.scandurra.osspecificplugins.repository.PluginRepository
 import de.scandurra.osspecificplugins.service.ResolverService
@@ -33,7 +34,7 @@ class PluginController(
         @RequestParam arch: PlatformSet.CpuArchitecture,
     ): ResponseEntity<Any> {
         val plugin = repo.findById(Plugin.PluginId(id)) ?: return ResponseEntity.notFound().build()
-        val res = resolver.resolveBest(plugin, PlatformSet.Platform(os, arch))
+        val res = resolver.resolveBest(plugin, Platform(os, arch))
             ?: return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                 .body(mapOf("error" to "No compatible variant"))
         return ResponseEntity.ok()
